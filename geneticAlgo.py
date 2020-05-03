@@ -12,7 +12,7 @@ class Object:
         self.mutateFlag = False
     
     def newChar(self):
-        return "".join(random.choice(string.ascii_lowercase))
+        return "".join(random.choice(string.ascii_letters + " "))
 
     def geneCoder(self):
         for i in range(0,self.length):
@@ -39,7 +39,7 @@ class Object:
 
     def mutate(self,mut_rate):
         for i in range(0,len(self.genes)):
-            if random.randint(0,1) < mut_rate:
+            if random.uniform(0,1) < mut_rate:
                 self.genes[i] = self.newChar()
                 self.mutateFlag = True
 
@@ -58,6 +58,7 @@ class Population:
         self.popGenecode = []
         self.matepool = []
         self.fitnessArr = []
+        self.prevPopulation = []
         self.generation = 0
         self.finishState = False
         self.fittestPopElement = []
@@ -89,7 +90,7 @@ class Population:
         upper = 1
         #TO BE TESTED self.population[i].score VAL
         for i in range(0,len(self.population)):
-            normFit = math.floor((lower + (upper - lower) * self.population[i].score)*100)
+            normFit = math.floor((lower + (upper - lower) * self.population[i].score**2)*100)
             for j in range(0,normFit):
                 self.matepool.append(self.population[i])
 
@@ -111,24 +112,37 @@ class Population:
             self.finishState=True
 
 
+def stringSlice(test_str):
+    res_first, res_second = test_str[:len(test_str)//2], test_str[len(test_str)//2:] 
+  
+# printing result  
+    print("The first part of string : " + res_first) 
+    print("The second part of string : " + res_second)
+
 
 def mainfun():
-    t1 = time.time()
-    target = "gautham"
-    popMax = 100
-    mutRate = 0.012
+    
+    target = str(input("Enter String to mutate into : "))
+    popMax = 200
+    mutRate = 0.01
 
     pop = Population(target,mutRate,popMax)
     pop.populationInit()
+    t1 = time.time()
     while True:
         pop.fitnessChk()
         pop.selectionProc()
         pop.sexytime()
         pop.finishCheck()
-        print("population is : {}, with fitness : {}\n".format(pop.fittestPopElement,pop.fittest))
+        print("population is : {}, with fitness : {}\n".format("".join([el for el in pop.fittestPopElement]),pop.fittest))
+        tt = time.time()
+        if tt-t1>35:
+            print("Time limit reached")
+            break
         if pop.finishState==True:
             t2 = time.time()
+            print("Optimal Evolution found in {} s".format(t2-t1))
             break
-    print("Optimal Evolution found in {} s".format(t2-t1))
+    
 
-mainfun()
+stringSlice("gauthamjs")
