@@ -64,7 +64,8 @@ class Population:
         self.fittestPopElement = []
 
         self.fittest = 0
-        self.normFitness = [] 
+        self.normFitness = []
+        self.suspected = [] 
 
     def populationInit(self):
         for i in range(0,self.maxPop):
@@ -81,16 +82,17 @@ class Population:
     
     def selectionProc(self):
         self.fittest = 0.0
-        for i in range(0,len(self.target)):
+        for i in range(0,len(self.population)):
             if self.population[i].score>self.fittest:
                 self.fittest = self.population[i].score
                 self.fittestPopElement = self.population[i].genes
         
         lower = 0
         upper = 1
-        #TO BE TESTED self.population[i].score VAL
+
         for i in range(0,len(self.population)):
-            normFit = math.floor((lower + (upper - lower) * self.population[i].score**2)*100)
+            normFit = math.floor((self.population[i].score)*100)
+            self.normFitness.append(normFit)
             for j in range(0,normFit):
                 self.matepool.append(self.population[i])
 
@@ -111,19 +113,10 @@ class Population:
         if self.fittest == 1:
             self.finishState=True
 
-
-def stringSlice(test_str):
-    res_first, res_second = test_str[:len(test_str)//2], test_str[len(test_str)//2:] 
-  
-# printing result  
-    print("The first part of string : " + res_first) 
-    print("The second part of string : " + res_second)
-
-
 def mainfun():
     
     target = str(input("Enter String to mutate into : "))
-    popMax = 200
+    popMax = 500
     mutRate = 0.01
 
     pop = Population(target,mutRate,popMax)
@@ -145,4 +138,4 @@ def mainfun():
             break
     
 
-stringSlice("gauthamjs")
+mainfun()
