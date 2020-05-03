@@ -44,10 +44,6 @@ class Object:
                 self.mutateFlag = True
 
 
-
-
-
-
 class Population:
     def __init__(self, target, mut_rate, maxPop):
         self.maxPop = maxPop
